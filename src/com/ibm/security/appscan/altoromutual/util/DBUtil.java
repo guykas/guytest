@@ -23,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -491,7 +492,13 @@ public class DBUtil {
 		try {
 			Connection connection = getConnection();
 			Statement statement = connection.createStatement();
-			statement.execute("INSERT INTO PEOPLE (USER_ID,PASSWORD,FIRST_NAME,LAST_NAME,ROLE) VALUES ('"+username+"','"+password+"', '"+firstname+"', '"+lastname+"','user')");
+			PreparedStatement pstmt = connection.prepareStatement("INSERT INTO PEOPLE (USER_ID,PASSWORD,FIRST_NAME,LAST_NAME,ROLE) VALUES (?, ?, ?, ?, ?)");
+				pstmt.setString(1, username);
+				pstmt.setString(2, password);
+				pstmt.setString(3, firstname);
+				pstmt.setString(4, lastname);
+				pstmt.setString(5, "user");
+				pstmt.executeUpdate();
 			return null;
 		} catch (SQLException e){
 			return e.toString();
