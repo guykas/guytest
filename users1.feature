@@ -43,4 +43,40 @@ Feature: sample karate test script
     # When method get
     # Then status 200
     # And match response contains user
+
+  Scenario: survey completion escapes reflected email input
+    Given url 'http://localhost:8080/AltoroJ/survey_questions.jsp'
+    And param step = 'a'
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp'
+    When method get
+    Then status 200
+
+    And param step = 'b'
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp?step=a'
+    When method get
+    Then status 200
+
+    And param step = 'c'
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp?step=b'
+    When method get
+    Then status 200
+
+    And param step = 'd'
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp?step=c'
+    When method get
+    Then status 200
+
+    And param step = 'email'
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp?step=d'
+    When method get
+    Then status 200
+
+    * def payload = '<script>alert(1)</script>'
+    And param step = 'done'
+    And param txtEmail = payload
+    And header Referer = 'http://localhost:8080/AltoroJ/survey_questions.jsp?step=email'
+    When method get
+    Then status 200
+    And match response contains '&lt;script&gt;alert(1)&lt;/script&gt;'
+    And match response !contains '<script>alert(1)</script>'
   
