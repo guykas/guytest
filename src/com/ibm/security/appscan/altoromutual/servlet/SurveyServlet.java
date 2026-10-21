@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ibm.security.appscan.altoromutual.util.ServletUtil;
+
 /**
  * Servlet implementation class SurveyServlet
  * @author Alexei
@@ -78,7 +80,7 @@ public class SurveyServlet extends HttpServlet {
 		}
 		else if (step.equals("done")){
 			content = "<h1>Thanks</h1>"+
-			"<div width=\"99%\"><p>Thanks for your entry.  We will contact you shortly at:<br /><br /> <b>" + request.getParameter("txtEmail") + "</b></p></div>";
+			"<div width=\"99%\"><p>Thanks for your entry.  We will contact you shortly at:<br /><br /> <b>" + ServletUtil.sanitizeWeb(request.getParameter("txtEmail")) + "</b></p></div>";
 			previousStep="email";
 		}
 		else {
